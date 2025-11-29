@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: hrai-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-hrai_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hrai_password}
+      POSTGRES_DB: ${DB_NAME:-hrai}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hrai-backend
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-hrai_user}:${DB_PASSWORD:-hrai_password}@db:5432/${DB_NAME:-hrai}
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      UPLOAD_DIR: /app/uploads/resumes
+    depends_on:
+      - db
+    volumes:
+      - backend_uploads:/app/uploads
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hrai-frontend
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: hrai-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - backend_uploads:/var/www/uploads:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+
+volumes:
+  postgres_data:
+  backend_uploads:

@@ -1,0 +1,40 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+venv/
+.env
+*.egg-info
+
+# Node
+node_modules/
+dist/
+.next/
+.nuxt/
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+
+# Docs
+*.md
+docs/
+
+# Tests
+tests/
+coverage/
+.coverage
+
+# Misc
+.DS_Store
+*.log
