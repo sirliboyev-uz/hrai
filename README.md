@@ -2,6 +2,17 @@
 
 AI-powered platform for HR managers to screen and rank job candidates automatically.
 
+## Screenshots
+
+### Dashboard
+![Dashboard](docs/images/dashboard.png)
+
+### Job Detail Page
+![Job Detail](docs/images/job-detail.png)
+
+### Candidate Analysis Modal
+![Candidate Modal](docs/images/candidate-modal.png)
+
 ## Features
 
 - **Job Management**: Create and manage job postings with required skills
