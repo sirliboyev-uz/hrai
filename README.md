@@ -6,16 +6,20 @@ AI-powered platform for HR managers to screen and rank job candidates automatica
 
 - **Job Management**: Create and manage job postings with required skills
 - **Public Application Links**: Share unique links for candidates to apply
-- **AI Resume Parsing**: Automatic extraction of skills and experience
+- **AI Resume Analysis**: OpenAI GPT-4o-mini powered candidate evaluation
 - **Smart Scoring**: AI-powered candidate ranking based on job requirements
 - **Candidate Management**: Review, interview, or reject candidates
+- **Resume Download**: Download candidate resumes directly
+- **HR Notes**: Add private notes to candidate profiles
+- **Skills Matching**: View matched and missing skills for each candidate
 
 ## Tech Stack
 
 - **Frontend**: React + TypeScript + Tailwind CSS
 - **Backend**: FastAPI (Python)
 - **Database**: PostgreSQL
-- **AI/ML**: spaCy for NLP
+- **AI**: OpenAI GPT-4o-mini for resume analysis
+- **Resume Parsing**: pdfplumber, python-docx
 
 ## Quick Start
 
@@ -43,13 +47,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
 
 # Set up environment
 cp .env.example .env
-# Edit .env with your database credentials
+# Edit .env with your database credentials and OpenAI API key
 
-# Run migrations (tables are auto-created on startup)
+# Run server (tables are auto-created on startup)
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -90,7 +93,7 @@ hrai/
 │   │   ├── models/        # SQLAlchemy models
 │   │   ├── schemas/       # Pydantic schemas
 │   │   ├── services/      # Business logic
-│   │   ├── ml/            # AI/ML components
+│   │   ├── ml/            # AI analysis & resume parsing
 │   │   ├── db/            # Database config
 │   │   └── utils/         # Utilities
 │   ├── uploads/           # Resume storage
@@ -121,6 +124,8 @@ hrai/
 - `POST /api/jobs` - Create job
 - `GET /api/jobs` - List jobs
 - `GET /api/jobs/{id}` - Get job details
+- `PATCH /api/jobs/{id}` - Update job
+- `DELETE /api/jobs/{id}` - Delete job
 
 ### Public (Candidates)
 - `GET /api/public/jobs/{link}` - View job
@@ -128,7 +133,10 @@ hrai/
 
 ### Applications
 - `GET /api/jobs/{id}/applications` - List candidates
-- `POST /api/applications/{id}/action` - Interview/Reject
+- `GET /api/applications/{id}` - Get candidate details
+- `POST /api/applications/{id}/action` - Interview/Reject/Hire
+- `PUT /api/applications/{id}/notes` - Update HR notes
+- `GET /api/applications/{id}/resume` - Download resume
 
 ## Environment Variables
 
@@ -137,6 +145,7 @@ hrai/
 DATABASE_URL=postgresql://user:pass@localhost:5432/hrai
 SECRET_KEY=your-secret-key
 UPLOAD_DIR=./uploads/resumes
+OPENAI_API_KEY=your-openai-api-key
 ```
 
 ### Frontend
